@@ -1,0 +1,7 @@
+#ignore patch files
+*.patch
+
+#ignore backup files
+*~
+\#*\#
+
