@@ -41,5 +41,6 @@ unzip $DOCUMENT_PATH -d $EXTRACT_DIR
 
 # clean XML
 cd $EXTRACT_DIR
-find ./ -name "*.rels" -o -name "*.xml" | xargs -n1 tidy -q -m -i -xml
+find ./ -name "*.rels" -o -name "*.xml" | \
+    xargs -n1 tidy -q -m -i -xml -utf8
 
