@@ -40,7 +40,7 @@ rm document.docx
 
 # compress files
 cd $DOCUMENT_FILES_PATH
-zip -r $TMP_PATH/document *
+zip -r $TMP_PATH/document * --exclude \*~
 
 # rename to docx
 mv $TMP_PATH/document.zip $CURRENT_PATH/document.docx
