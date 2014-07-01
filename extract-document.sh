@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # extract-document.sh - Extracts and pretty-prints the contents of an
-# OOXML document file.
+# OOXML or ODF document file.
 # Copyright (C) 2013 Igalia, S.L. <info@igalia.com>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,6 @@
 # TODO:
 # * Add usage notice
 # * Support file paths with spaces
-# * Support other file types
 
 die () {
     echo >&2 "$@"
@@ -34,7 +33,8 @@ DOCUMENT_PATH=$1
 [ -e $DOCUMENT_PATH ]   || die "File $DOCUMENT_PATH does not exist"
 
 # get name
-EXTRACT_DIR=`basename -s .docx $DOCUMENT_PATH`
+EXT=${DOCUMENT_PATH##*.}
+EXTRACT_DIR=`basename -s .$EXT $DOCUMENT_PATH`
 
 # extract document
 unzip $DOCUMENT_PATH -d $EXTRACT_DIR
