@@ -29,7 +29,6 @@ die () {
 
 DOCUMENT_FILES_PATH=$1
 CURRENT_PATH=`pwd`
-TMP_PATH="/tmp"
 
 # check document exists
 [ -n "$DOCUMENT_FILES_PATH" ] || die "No path provided"
@@ -40,8 +39,4 @@ rm document.docx
 
 # compress files
 cd $DOCUMENT_FILES_PATH
-zip -r $TMP_PATH/document * --exclude \*~
-
-# rename to docx
-mv $TMP_PATH/document.zip $CURRENT_PATH/document.docx
-
+zip -r $CURRENT_PATH/document.docx * --exclude \*~
