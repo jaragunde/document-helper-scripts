@@ -35,7 +35,10 @@ CURRENT_PATH=`pwd`
 [ -e $DOCUMENT_FILES_PATH ]   || die "Directory $DOCUMENT_FILES_PATH does not exist"
 
 # remove old document
-rm document.docx
+if [ -e document.docx ]; then
+  echo "Existing file document.docx removed"
+  rm document.docx
+fi
 
 # compress files
 cd $DOCUMENT_FILES_PATH
