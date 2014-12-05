@@ -19,7 +19,6 @@
 
 # TODO:
 # * Add usage notice
-# * Support file paths with spaces
 
 die () {
     echo >&2 "$@"
@@ -41,6 +40,6 @@ unzip $DOCUMENT_PATH -d $EXTRACT_DIR
 
 # clean XML
 cd $EXTRACT_DIR
-find ./ -name "*.rels" -o -name "*.xml" | \
-    xargs -n1 tidy -q -m -i -xml -utf8
+find ./ -name "*.rels" -o -name "*.xml" -exec \
+    tidy -q -m -i -xml -utf8 '{}' +
 
