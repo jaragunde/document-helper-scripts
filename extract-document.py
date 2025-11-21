@@ -29,7 +29,7 @@ def beautify_xml_files(directory):
                 with open(file_path, "w", encoding="utf-8") as f:
                     f.write(pretty_xml_as_string)
 
-                print(f"Beautified: {file_path.relative_to(directory)}")
+                print(f"Beautified: {file_path.relative_to(directory.parent)}")
             except Exception as e:
                 print(f"Warning: Could not beautify '{file_path.name}': {e}")
 
