@@ -21,9 +21,19 @@ def pack_directory(directory_path):
         sys.exit(1)
 
     # Determine the output zip file path
-    # Name: <directory_name>-repacked.zip
+    # Check for subdirectories to decide extension
+    if (dir_path / "word").is_dir():
+        extension = ".docx"
+    elif (dir_path / "xl").is_dir():
+        extension = ".xlsx"
+    elif (dir_path / "ppt").is_dir():
+        extension = ".pptx"
+    else:
+        extension = ".zip"
+
+    # Name: <directory_name>-repacked<extension>
     # Location: Same parent directory as the input directory
-    zip_filename = f"{dir_path.name}-repacked.zip"
+    zip_filename = f"{dir_path.name}-repacked{extension}"
     zip_path = dir_path.parent / zip_filename
 
     try:
