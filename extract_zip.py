@@ -2,7 +2,36 @@
 import argparse
 import zipfile
 import sys
+import xml.dom.minidom
 from pathlib import Path
+
+def beautify_xml_files(directory):
+    """
+    Searches for .xml and .xml.rels files in the directory and beautifies them.
+    """
+    print(f"Looking for XML files to beautify in '{directory}'...")
+    for file_path in directory.rglob("*"):
+        # Check for suffixes. Note: .xml.rels ends with .rels, but user asked for "suffix xml or xml.rels"
+        # We can check string ending.
+        if file_path.is_file() and (file_path.name.endswith(".xml") or file_path.name.endswith(".xml.rels")):
+            try:
+                # Parse the XML file
+                dom = xml.dom.minidom.parse(str(file_path))
+
+                # specific fix for minidom adding too much whitespace:
+                # We can just use toprettyxml, but often it adds extra newlines.
+                # Let's do a simple strip of empty lines to make it cleaner.
+                pretty_xml_as_string = dom.toprettyxml(indent="  ")
+
+                # Filter out empty lines
+                pretty_xml_as_string = "\n".join([line for line in pretty_xml_as_string.split('\n') if line.strip()])
+
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(pretty_xml_as_string)
+
+                print(f"Beautified: {file_path.relative_to(directory)}")
+            except Exception as e:
+                print(f"Warning: Could not beautify '{file_path.name}': {e}")
 
 def extract_zip(file_path):
     """
@@ -32,6 +61,8 @@ def extract_zip(file_path):
             zip_ref.extractall(destination_dir)
             
         print("Extraction complete.")
+
+        beautify_xml_files(destination_dir)
 
     except Exception as e:
         print(f"An error occurred during extraction: {e}")
