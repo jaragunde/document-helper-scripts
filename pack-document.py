@@ -5,10 +5,11 @@ import sys
 import os
 from pathlib import Path
 
-def pack_directory(directory_path):
+def pack_directory(directory_path, output_name=None):
     """
     Creates a zip file with the contents of the specified directory.
-    The zip file will be named like the original directory, with the suffix "-repacked".
+    The zip file will be named like the original directory, with the suffix "-repacked",
+    unless an output name is specified.
     """
     dir_path = Path(directory_path).resolve()
 
@@ -20,8 +21,7 @@ def pack_directory(directory_path):
         print(f"Error: '{dir_path}' is not a directory.")
         sys.exit(1)
 
-    # Determine the output zip file path
-    # Check for subdirectories to decide extension
+    # Determine the extension based on subdirectories
     if (dir_path / "word").is_dir():
         extension = ".docx"
     elif (dir_path / "xl").is_dir():
@@ -31,10 +31,16 @@ def pack_directory(directory_path):
     else:
         extension = ".zip"
 
-    # Name: <directory_name>-repacked<extension>
-    # Location: Same parent directory as the input directory
-    zip_filename = f"{dir_path.name}-repacked{extension}"
-    zip_path = dir_path.parent / zip_filename
+    if output_name:
+        # Add extension if not present
+        if not output_name.endswith(extension):
+            output_name += extension
+        zip_path = Path(output_name).resolve()
+    else:
+        # Name: <directory_name>-repacked<extension>
+        # Location: Same parent directory as the input directory
+        zip_filename = f"{dir_path.name}-repacked{extension}"
+        zip_path = dir_path.parent / zip_filename
 
     if zip_path.exists():
         response = input(f"File '{zip_path}' already exists. Overwrite? (y/N): ").strip().lower()
@@ -66,7 +72,8 @@ def pack_directory(directory_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pack a directory into a zip file with suffix '-repacked'.")
     parser.add_argument("directory_path", help="Path to the directory to pack")
+    parser.add_argument("output_name", nargs="?", help="Optional name for the output file")
     
     args = parser.parse_args()
     
-    pack_directory(args.directory_path)
+    pack_directory(args.directory_path, args.output_name)
