@@ -36,6 +36,12 @@ def pack_directory(directory_path):
     zip_filename = f"{dir_path.name}-repacked{extension}"
     zip_path = dir_path.parent / zip_filename
 
+    if zip_path.exists():
+        response = input(f"File '{zip_path}' already exists. Overwrite? (y/N): ").strip().lower()
+        if response != 'y':
+            print("Operation cancelled.")
+            sys.exit(0)
+
     try:
         print(f"Packing contents of '{dir_path}' into '{zip_path}'...")
 
