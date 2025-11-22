@@ -40,10 +40,29 @@ def diff_documents(file1, file2):
         print(f"Error: File '{path2}' does not exist.")
         sys.exit(1)
 
-    print(f"Comparing 'word/document.xml' in '{path1.name}' and '{path2.name}'...")
+    # Check extensions
+    ext1 = path1.suffix.lower()
+    ext2 = path2.suffix.lower()
 
-    content1 = get_pretty_xml_content(path1)
-    content2 = get_pretty_xml_content(path2)
+    if ext1 != ext2:
+        print(f"Error: Files must have the same extension. Got '{ext1}' and '{ext2}'.")
+        sys.exit(1)
+
+    # Determine internal path based on extension
+    if ext1 == ".docx":
+        internal_path = "word/document.xml"
+    elif ext1 == ".pptx":
+        internal_path = "ppt/presentation.xml"
+    elif ext1 == ".xlsx":
+        internal_path = "xl/workbook.xml"
+    else:
+        print(f"Error: Unsupported file extension '{ext1}'. Supported: .docx, .pptx, .xlsx")
+        sys.exit(1)
+
+    print(f"Comparing '{internal_path}' in '{path1.name}' and '{path2.name}'...")
+
+    content1 = get_pretty_xml_content(path1, internal_path)
+    content2 = get_pretty_xml_content(path2, internal_path)
 
     if content1 is None or content2 is None:
         sys.exit(1)
@@ -51,8 +70,8 @@ def diff_documents(file1, file2):
     diff = difflib.unified_diff(
         content1, 
         content2, 
-        fromfile=f"{path1.name}/word/document.xml", 
-        tofile=f"{path2.name}/word/document.xml"
+        fromfile=f"{path1.name}/{internal_path}",
+        tofile=f"{path2.name}/{internal_path}"
     )
 
     diff_output = "".join(diff)
@@ -63,7 +82,7 @@ def diff_documents(file1, file2):
         print("No differences found.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Compare 'word/document.xml' between two OOXML documents.")
+    parser = argparse.ArgumentParser(description="Compare internal XML content between two OOXML documents (docx, pptx, xlsx).")
     parser.add_argument("file1", help="Path to the first document (zip file)")
     parser.add_argument("file2", help="Path to the second document (zip file)")
     

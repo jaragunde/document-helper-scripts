@@ -35,7 +35,10 @@ python3 pack-document.py <directory_path> [output_name]
 
 ### `diff-documents.py`
 
-Compares the `word/document.xml` content of two documents.
+Compares the internal XML content of two documents based on their extension:
+- `.docx`: `word/document.xml`
+- `.pptx`: `ppt/presentation.xml`
+- `.xlsx`: `xl/workbook.xml`
 
 **Usage:**
 ```bash
@@ -43,6 +46,7 @@ python3 diff-documents.py <doc1> <doc2>
 ```
 
 **Features:**
+- Automatically selects the correct XML file to compare.
 - Pretty-prints XML before comparing to ignore formatting differences.
 - Outputs a unified diff.
 
