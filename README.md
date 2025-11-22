@@ -42,11 +42,12 @@ Compares the internal XML content of two documents based on their extension:
 
 **Usage:**
 ```bash
-python3 diff-documents.py <doc1> <doc2>
+python3 diff-documents.py <doc1> <doc2> [internal_file_path]
 ```
 
 **Features:**
-- Automatically selects the correct XML file to compare.
+- Automatically selects the correct XML file to compare based on extension.
+- Can optionally specify a specific file inside the zip to compare (e.g., `word/styles.xml`).
 - Pretty-prints XML before comparing to ignore formatting differences.
 - Outputs a unified diff.
 
