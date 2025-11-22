@@ -54,6 +54,12 @@ def extract_zip(file_path):
     # The user asked for "minus the suffix", usually implying the extension.
     destination_dir = zip_path.parent / zip_path.stem
 
+    if destination_dir.exists():
+        response = input(f"Directory '{destination_dir}' already exists. Overwrite? (y/N): ").strip().lower()
+        if response != 'y':
+            print("Operation cancelled.")
+            sys.exit(0)
+
     try:
         print(f"Extracting '{zip_path.name}' to '{destination_dir}'...")
         
